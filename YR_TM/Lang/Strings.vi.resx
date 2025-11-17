@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Address_Text" xml:space="preserve">
+    <value>Địa chỉ IP:</value>
+  </data>
+  <data name="AlarmCode" xml:space="preserve">
+    <value>Mã cảnh báo</value>
+  </data>
+  <data name="Alarm_Info" xml:space="preserve">
+    <value>Thông báo cảnh báo</value>
+  </data>
+  <data name="Angle" xml:space="preserve">
+    <value>Góc</value>
+  </data>
+  <data name="Angle_Text" xml:space="preserve">
+    <value>Đọc góc</value>
+  </data>
+  <data name="AutoRefresh_Text" xml:space="preserve">
+    <value>Tự động làm mới</value>
+  </data>
+  <data name="Baud_Text" xml:space="preserve">
+    <value>Tốc độ Baud:</value>
+  </data>
+  <data name="Brightness" xml:space="preserve">
+    <value>Độ sáng:</value>
+  </data>
+  <data name="Btn_Clear" xml:space="preserve">
+    <value>Xóa cảnh báo</value>
+  </data>
+  <data name="Btn_Export" xml:space="preserve">
+    <value>Xuất</value>
+  </data>
+  <data name="Btn_Load" xml:space="preserve">
+    <value>Tải</value>
+  </data>
+  <data name="Btn_MoveTo" xml:space="preserve">
+    <value>Di chuyển</value>
+  </data>
+  <data name="Btn_Query" xml:space="preserve">
+    <value>Truy vấn</value>
+  </data>
+  <data name="Btn_Refresh" xml:space="preserve">
+    <value>Điều khiển làm mới</value>
+  </data>
+  <data name="Btn_Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Máy ảnh</value>
+  </data>
+  <data name="CameraControl_Text" xml:space="preserve">
+    <value>Điều khiển camera</value>
+  </data>
+  <data name="CameraX_Text" xml:space="preserve">
+    <value>Camera trên + Trục X lấy liệu</value>
+  </data>
+  <data name="CameraZ_Text" xml:space="preserve">
+    <value>Camera + Trục Z lấy liệu</value>
+  </data>
+  <data name="Camera_Text" xml:space="preserve">
+    <value>Thông số camera</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Kênh:</value>
+  </data>
+  <data name="Configuration_Text" xml:space="preserve">
+    <value>Cấu hình truyền thông</value>
+  </data>
+  <data name="Connect_Text" xml:space="preserve">
+    <value>Kết nối</value>
+  </data>
+  <data name="Continuou_Text" xml:space="preserve">
+    <value>Liên tục</value>
+  </data>
+  <data name="Device_Text" xml:space="preserve">
+    <value>Loại thiết bị: </value>
+  </data>
+  <data name="DispensingX_Text" xml:space="preserve">
+    <value>Trục X cho việc phun keo</value>
+  </data>
+  <data name="DispensingZ_Text" xml:space="preserve">
+    <value>Trục Z cho việc phun keo</value>
+  </data>
+  <data name="Duration_Text" xml:space="preserve">
+    <value>Khoảng thời gian</value>
+  </data>
+  <data name="EndTime_Text" xml:space="preserve">
+    <value>Thời gian kết thúc</value>
+  </data>
+  <data name="Exposure_Text" xml:space="preserve">
+    <value>Thời gian phơi sáng</value>
+  </data>
+  <data name="FileName_Text" xml:space="preserve">
+    <value>Tên tập tin</value>
+  </data>
+  <data name="HodlerY_Text" xml:space="preserve">
+    <value>Trục Y của giá giữ</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Đường dẫn ảnh:</value>
+  </data>
+  <data name="IOConnect_Text" xml:space="preserve">
+    <value>Trạng thái: Kết nối bình thường</value>
+  </data>
+  <data name="IO_Text" xml:space="preserve">
+    <value>Thiết lập IO</value>
+  </data>
+  <data name="Label_Language" xml:space="preserve">
+    <value>Ngôn ngữ：</value>
+  </data>
+  <data name="lblDevice_Text" xml:space="preserve">
+    <value>Chọn thiết bị:</value>
+  </data>
+  <data name="Lbl_Status_Not_Connect" xml:space="preserve">
+    <value>EtherCAT: Chưa kết nối</value>
+  </data>
+  <data name="Lbl_Time" xml:space="preserve">
+    <value>Thời gian</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Nguồn sáng</value>
+  </data>
+  <data name="LightControl_Text" xml:space="preserve">
+    <value>Điều khiển nguồn sáng</value>
+  </data>
+  <data name="Light_Text" xml:space="preserve">
+    <value>Thông số nguồn sáng</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Đường dẫn nhật ký:</value>
+  </data>
+  <data name="Log_SystemStart" xml:space="preserve">
+    <value>Hệ thống đã khởi động</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>Tệp</value>
+  </data>
+  <data name="ModificationTime_Text" xml:space="preserve">
+    <value>Thời gian sửa đổi</value>
+  </data>
+  <data name="Motion_Text" xml:space="preserve">
+    <value>Điều khiển chuyển động</value>
+  </data>
+  <data name="Msg_SaveSuccess" xml:space="preserve">
+    <value>Lưu thành công!</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Lựa chọn card mạng:</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Tắt</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Bật</value>
+  </data>
+  <data name="Path_Text" xml:space="preserve">
+    <value>Cài đặt đường dẫn</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Chụp ảnh</value>
+  </data>
+  <data name="PointAdjustment" xml:space="preserve">
+    <value>iều chỉnh điểm</value>
+  </data>
+  <data name="Point_Text" xml:space="preserve">
+    <value>Tên điểm</value>
+  </data>
+  <data name="RAxis" xml:space="preserve">
+    <value>Trục R</value>
+  </data>
+  <data name="RAxis_Text" xml:space="preserve">
+    <value>Trục R xoay</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Chu kỳ làm mới</value>
+  </data>
+  <data name="Run_Mode" xml:space="preserve">
+    <value>Chế độ vận hành:</value>
+  </data>
+  <data name="Screwdriver" xml:space="preserve">
+    <value>Tua vít điện</value>
+  </data>
+  <data name="ScrewdriverOperation_Text" xml:space="preserve">
+    <value>Thao tác tua vít điện</value>
+  </data>
+  <data name="Screwdriver_Text" xml:space="preserve">
+    <value>Điều khiển tua vít điện</value>
+  </data>
+  <data name="ScrewStatu_Text" xml:space="preserve">
+    <value>Trạng thái: Nhàn rỗi</value>
+  </data>
+  <data name="SelectDirectory_Text" xml:space="preserve">
+    <value>Chọn thư mục</value>
+  </data>
+  <data name="Selection_Text" xml:space="preserve">
+    <value>Lựa chọn trục</value>
+  </data>
+  <data name="Serial_Text" xml:space="preserve">
+    <value>Số hiệu cổng COM:</value>
+  </data>
+  <data name="Signal_Text" xml:space="preserve">
+    <value>Tín hiệu đầu vào</value>
+  </data>
+  <data name="StartTime_Text" xml:space="preserve">
+    <value>Thời gian bắt đầu</value>
+  </data>
+  <data name="Start_Text" xml:space="preserve">
+    <value>Khởi động</value>
+  </data>
+  <data name="State_Text" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Step" xml:space="preserve">
+    <value>Khoảng cách bước</value>
+  </data>
+  <data name="Stop_Text" xml:space="preserve">
+    <value>Dừng</value>
+  </data>
+  <data name="System_Text" xml:space="preserve">
+    <value>Cài đặt hệ thống</value>
+  </data>
+  <data name="Torque" xml:space="preserve">
+    <value>Mô-men xoắn</value>
+  </data>
+  <data name="Torque_Text" xml:space="preserve">
+    <value>Đọc mô-men xoắn</value>
+  </data>
+  <data name="XAxis" xml:space="preserve">
+    <value>Trục X</value>
+  </data>
+  <data name="YAxis" xml:space="preserve">
+    <value>Trục Y</value>
+  </data>
+  <data name="ZAxis" xml:space="preserve">
+    <value>Trục Z</value>
+  </data>
+</root>
