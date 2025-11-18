@@ -15,6 +15,8 @@
         {
             if (disposing && (components != null))
             {
+                mainPanel?.Dispose();
+                topMenu?.Dispose();
                 components.Dispose();
             }
             base.Dispose(disposing);

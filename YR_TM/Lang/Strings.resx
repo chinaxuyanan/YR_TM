@@ -228,6 +228,9 @@
   <data name="lblDevice_Text" xml:space="preserve">
     <value>选择设备：</value>
   </data>
+  <data name="Lbl_Status_Connect" xml:space="preserve">
+    <value>总线：已连接</value>
+  </data>
   <data name="Lbl_Status_Not_Connect" xml:space="preserve">
     <value>总线：未连接</value>
   </data>

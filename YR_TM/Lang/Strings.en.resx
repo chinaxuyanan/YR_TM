@@ -228,6 +228,9 @@
   <data name="lblDevice_Text" xml:space="preserve">
     <value>Select Device:</value>
   </data>
+  <data name="Lbl_Status_Connect" xml:space="preserve">
+    <value>EtherCAT: Connected</value>
+  </data>
   <data name="Lbl_Status_Not_Connect" xml:space="preserve">
     <value>EtherCAT: Not Connect</value>
   </data>

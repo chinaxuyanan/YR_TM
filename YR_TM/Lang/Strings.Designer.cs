@@ -385,6 +385,15 @@ namespace YR_TM.Lang {
         }
         
         /// <summary>
+        ///   查找类似 总线：已连接 的本地化字符串。
+        /// </summary>
+        internal static string Lbl_Status_Connect {
+            get {
+                return ResourceManager.GetString("Lbl_Status_Connect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 总线：未连接 的本地化字符串。
         /// </summary>
         internal static string Lbl_Status_Not_Connect {

@@ -113,12 +113,20 @@ namespace YR_Framework.UI
                 this.Invoke(new Action<UserControl>(ShowControl), control);
                 return;
             }
+            
+            //隐藏旧控件
+            if(mainPanel.Controls.Count > 0)
+            {
+                mainPanel.Controls[0].Visible = false;
+            }
 
-            mainPanel.Controls.Clear();
+            //mainPanel.Controls.Clear();
             if(control != null)
             {
                 control.Dock = DockStyle.Fill;
+                mainPanel.Controls.Clear();
                 mainPanel.Controls.Add(control);
+                control.Visible = true;
             }
         }
     }

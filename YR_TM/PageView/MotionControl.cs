@@ -20,7 +20,6 @@ namespace YR_TM.PageView
         private FlowLayoutPanel flowPanel;
         private Button btnRefresh;
         private ComboBox cmbDevice;
-        private const string ConfigFile = "MotionPoints.json";
 
         public MotionControl()
         {
@@ -145,6 +144,8 @@ namespace YR_TM.PageView
 
         private void BtnRefresh_Click(object sender, EventArgs e)
         {
+            var points = GetPointList();
+            GlobalDataPoint.SetPointList(points);
             SaveConfig();
             GeneratePointControls();
         }
@@ -283,7 +284,7 @@ namespace YR_TM.PageView
             };
         }
 
-        private List<MarkPoints> GetPointList()
+        public List<MarkPoints> GetPointList()
         {
             var list = new List<MarkPoints>();
             foreach (DataGridViewRow row in dgvPoints.Rows)
@@ -297,7 +298,7 @@ namespace YR_TM.PageView
                     Y = row.Cells["Y"].Value?.ToString() ?? "",
                     Z = row.Cells["Z"].Value?.ToString() ?? "",
                     R = row.Cells["R"].Value?.ToString() ?? "",
-                    XValue = row.Cells["XValue"].Value ?.ToString() ?? "",
+                    XValue = row.Cells["XValue"].Value?.ToString() ?? "",
                     YValue = row.Cells["YValue"].Value?.ToString() ?? "",
                     ZValue = row.Cells["ZValue"].Value?.ToString() ?? "",
                     RValue = row.Cells["RValue"].Value?.ToString() ?? "",
@@ -305,6 +306,8 @@ namespace YR_TM.PageView
                 if(!string.IsNullOrEmpty(p.Name))
                     list.Add(p);
             }
+
+            GlobalDataPoint.SetPointList(list);
             return list;
         }
 
@@ -312,23 +315,26 @@ namespace YR_TM.PageView
         {
             List<MarkPoints> allPoints = new List<MarkPoints>();
 
-            if (File.Exists(ConfigFile))
+            if (File.Exists(GlobalDataPoint.ConfigFile))
             {
-                var old = JsonSerializer.Deserialize<List<MarkPoints>>(File.ReadAllText(ConfigFile));
+                var old = JsonSerializer.Deserialize<List<MarkPoints>>(File.ReadAllText(GlobalDataPoint.ConfigFile));
                 allPoints.AddRange(old ?? new List<MarkPoints>());
                 allPoints.RemoveAll(p => p.Device == cmbDevice.Text);
             }
 
             allPoints.AddRange(GetPointList());
-            FileHelper.WriteJson(ConfigFile, allPoints);
+            GlobalDataPoint.SavePointListToJson(allPoints);
         }
 
         private void LoadConfig()
         {
             dgvPoints.Rows.Clear();
-            if(!File.Exists(ConfigFile)) return;
+            //if(!File.Exists(GlobalDataPoint.ConfigFile)) return;
 
-            var list = FileHelper.ReadJson<List<MarkPoints>>(ConfigFile);
+            //var list = FileHelper.ReadJson<List<MarkPoints>>(GlobalDataPoint.ConfigFile);
+            GlobalDataPoint.LoadPointListFromJson();
+            var list = GlobalDataPoint.GetPointList();
+
             var current = list?.FindAll(p => p.Device == cmbDevice.Text);
 
             if(current != null)

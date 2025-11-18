@@ -37,14 +37,19 @@ namespace YR_Framework.UI
             SetButtonSelected(btnMain);
             UpdateMenuAccess(AppState.CurrentUser);
 
-            EventCenter.Subscribe<TopMenuChangedEvent>((evt) =>
+            btnUser.Image = ResizeImage(Properties.Resources.Login_Off, 55);
+
+            EventCenter.Subscribe<LogOutChangeEvent>((evt) =>
             {
-                if (evt.CurrentTopMenu == "Reset")
-                {
-                    btnUser.Image = ResizeImage(Properties.Resources.Login_Off, 55);
-                    UpdateMenuAccess(UserLevel.Operator);
-                }
-            });
+                btnUser.Image = ResizeImage(Properties.Resources.Login_Off, 55);
+
+                if (evt == null) return;
+
+                if (this.InvokeRequired)
+                    this.Invoke(new Action(() => UpdateMenuAccess(evt.User)));
+                else
+                    UpdateMenuAccess(evt.User);
+            }, this);
         }
 
         private void CreateTopMenu()

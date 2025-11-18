@@ -31,10 +31,10 @@ namespace YR_TM.View
             tabControl = new TabControl();
             this.SuspendLayout();
 
-            tabMotionPage = new TabPage(LanguageManager.GetString("Motion_Text"));
-            tabIOPage = new TabPage(LanguageManager.GetString("IO_Text"));
-            tabScrewdriverPage = new TabPage(LanguageManager.GetString("Screwdriver_Text"));
-            SystemPage = new TabPage(LanguageManager.GetString("System_Text"));
+            tabMotionPage = CreateTabPage("Motion_Text", new MotionControl());
+            tabIOPage = CreateTabPage("IO_Text", new IOControl());
+            tabScrewdriverPage = CreateTabPage("Screwdriver_Text", new ScrewDriverControl());
+            SystemPage = CreateTabPage("System_Text", new SystemControl());
 
             //TabControl配置
             tabControl.Dock = DockStyle.Fill;
@@ -55,6 +55,16 @@ namespace YR_TM.View
 
             this.Controls.Add(tabControl);
             this.ResumeLayout(false);
+        }
+
+        ///<summary>
+        ///创建TabPage并添加控件
+        /// </summary>
+        private TabPage CreateTabPage(string resourceKey, Control control)
+        {
+            TabPage tabPage = new TabPage(LanguageManager.GetString(resourceKey));
+            tabPage.Controls.Add(control);
+            return tabPage;
         }
     }
 }

@@ -159,10 +159,9 @@ namespace YR_Framework.UI
 
             EventCenter.Publish(new UserChangedEvent { CurrentUser = AppState.CurrentUser });
             EventCenter.Publish(new RunModeChangedEvent { CurrentRunMode = AppState.CurrentRunMode });
+            EventCenter.Publish(new LogOutChangeEvent { User = AppState.CurrentUser });
 
             this.Close();
-
-            EventCenter.Publish(new TopMenuChangedEvent { CurrentTopMenu = "Reset" });
         }
 
         private void BtnLogin_Click(object sender, EventArgs e)

@@ -34,7 +34,7 @@ namespace YR_TM
             InitializeComponent();
             ShowControl(new PageMain());
 
-            LanguageManager.ApplyResources(this);
+            LanguageManager.ApplyResources(this); //应用语言资源
 
             //订阅语言改变事件，动态刷新UI
             LanguageManager.LanguageChanged += OnLanguageChanged;
@@ -77,38 +77,18 @@ namespace YR_TM
 
         private void OnStateChanged(RunState state)
         {
-            if (this.IsDisposed || this.Disposing) return;
-
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    if (!this.IsDisposed && !this.Disposing)
-                        EventCenter.Publish(new RunStateChangedEvent { CurrentRunState = state });
-                }));
-            }
-            else
+            SafeInvoke(() =>
             {
                 EventCenter.Publish(new RunStateChangedEvent { CurrentRunState = state });
-            }
+            });
         }
 
         private void OnLanguageChanged()
         {
-            if (this.IsDisposed || this.Disposing) return;
-
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    if (!this.IsDisposed && !this.Disposing)
-                        LanguageManager.ApplyResources(this);
-                }));
-            }
-            else
+            SafeInvoke(() =>
             {
                 LanguageManager.ApplyResources(this);
-            }
+            });
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -124,10 +104,6 @@ namespace YR_TM
                     e.Cancel = true;
                     return;
                 }
-                else
-                {
-                    MotionModule.Instance.Close();
-                }
             }
             MotionModule.Instance.Close();
         }
@@ -137,9 +113,6 @@ namespace YR_TM
             UnsubscribeEvents();
 
             base.OnFormClosed(e);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         private void UnsubscribeEvents()
@@ -156,6 +129,24 @@ namespace YR_TM
             catch (Exception ex)
             {
                 logger.Error($"取消事件订阅时发生错误：{ex.Message}");
+            }
+        }
+
+        private void SafeInvoke(Action action)
+        {
+            if (this.IsDisposed || this.Disposing) return;
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    if(!this.IsDisposed && !this.Disposing)
+                        action();
+                }));
+            }
+            else
+            {
+                action();
             }
         }
 

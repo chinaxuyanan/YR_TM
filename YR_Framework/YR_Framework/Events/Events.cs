@@ -22,6 +22,11 @@ namespace YR_Framework.Events
         public RunState CurrentRunState { get; set; }
     }
 
+    public class LogOutChangeEvent
+    {
+        public UserLevel User {  get; set; }
+    }
+
     public class TopMenuChangedEvent
     {
         public string CurrentTopMenu {  get; set; }

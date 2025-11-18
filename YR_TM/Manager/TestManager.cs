@@ -10,6 +10,7 @@ using YR_Framework.Core;
 using YR_Framework.Events;
 using YR_Framework.Models;
 using YR_TM.Modules;
+using YR_TM.PageView;
 using YR_TM.Utils;
 
 namespace YR_TM.Manager
@@ -33,7 +34,7 @@ namespace YR_TM.Manager
         public RunMode Mode { get; private set; } = RunMode.Product;
 
         public event Action<RunState> StateChanged;
-        //public event Action<bool> ConnectBusChanged;
+        public event Action<bool> ConnectBusChanged;
 
         public bool _connectBusState = false;
 
@@ -43,6 +44,8 @@ namespace YR_TM.Manager
             {
                 State = state;
                 StateChanged?.Invoke(state);
+
+                ConnectBusChanged?.Invoke(_connectBusState);
             }
         }
 
@@ -56,9 +59,16 @@ namespace YR_TM.Manager
                 //确保旧线程结束
                 _cts?.Cancel();
                 _cts?.Dispose();
-
                 //创建新的 CTS
                 _cts = new CancellationTokenSource();
+
+                //获取点位
+                GlobalDataPoint.LoadPointListFromJson();
+                var points = GlobalDataPoint.GetPointList();
+                foreach (var point in points)
+                {
+                    logger.Info($"点为名：{point.Name}, X: {point.XValue}, Y: {point.YValue}, Z: {point.ZValue}, R: {point.RValue}");
+                }
 
                 _ = Initialize(_cts.Token);
 
@@ -83,6 +93,7 @@ namespace YR_TM.Manager
             //}
             logger.Info("初始化完成！");
             _connectBusState = true;
+            SetState(State);
 
 
             logger.Info("开始复位...");

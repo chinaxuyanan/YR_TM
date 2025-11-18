@@ -14,6 +14,7 @@ using YR_Framework.Core;
 using YR_TM.Utils;
 using YR_Framework.Events;
 using YR_Framework.Models;
+using YR_TM.Manager;
 
 namespace YR_TM.View
 {
@@ -32,7 +33,6 @@ namespace YR_TM.View
         //底部状态栏
         private StatusStrip statusStrip;
         private ToolStripStatusLabel lblStatus, lblRunMode, lblCurrentTime;
-
         private Timer timer;
         public PageMain()
         {
@@ -40,6 +40,8 @@ namespace YR_TM.View
             InitializeUI();
 
             this.HandleCreated += PageMain_HandleCreated;
+
+            TestManager.Instance.ConnectBusChanged += OnConnectBusChanged;
 
             EventCenter.Subscribe<RunModeChangedEvent>((evt) =>
             {
@@ -51,6 +53,12 @@ namespace YR_TM.View
             timer = new Timer { Interval = 1000 };
             timer.Tick += Timer_Tick;
             timer.Start();
+        }
+
+        private void OnConnectBusChanged(bool isConnected)
+        {
+            lblStatus.Text = isConnected ? LanguageManager.GetString("Lbl_Status_Connect") : LanguageManager.GetString("Lbl_Status_Not_Connect");
+            lblStatus.ForeColor = isConnected ? Color.LimeGreen : Color.Red;
         }
 
         private void OnRunModeChangedFromTopMenu(object obj)
@@ -136,7 +144,6 @@ namespace YR_TM.View
                 ForeColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                //Margin = new Padding(10)
             };
             alarmDataGridView.Columns.Add("Time", $"{LanguageManager.GetString("Lbl_Time")}");
             alarmDataGridView.Columns.Add("Message", $"{LanguageManager.GetString("Alarm_Info")}");
@@ -223,7 +230,6 @@ namespace YR_TM.View
 
                 Panel camPanel = new Panel
                 {
-                    //Name = $"相机{i + 1}",
                     Width = eachWidth,
                     Height = eachHeight,
                     Left = col * eachWidth,
@@ -265,7 +271,7 @@ namespace YR_TM.View
         /// </summary>
         public void UpdateCameraImage(int camIndex, Image img)
         {
-            if(camIndex < 0 || camIndex > cameraPics.Count) return;
+            if(camIndex < 0 || camIndex >= cameraPics.Count) return;
             cameraPics[camIndex].Image = img;
         }
     }
