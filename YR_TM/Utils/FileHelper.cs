@@ -113,46 +113,53 @@ namespace YR_TM.Utils
             IOConfig config = new IOConfig();
 
             byte[] header = new byte[4];
-            using (var fs = File.OpenRead(path))
+            if (!File.Exists(path))
             {
-                fs.Read(header, 0, 4);
+                return new IOConfig();
             }
-            Console.WriteLine(BitConverter.ToString(header));
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+            else
             {
-                using (var reader = ExcelReaderFactory.CreateOpenXmlReader(stream))
+                using (var fs = File.OpenRead(path))
                 {
-                    var ds = reader.AsDataSet();
-                    var table = ds.Tables[0];
+                    fs.Read(header, 0, 4);
+                }
+                Console.WriteLine(BitConverter.ToString(header));
 
-                    for (int i = 2; i < table.Rows.Count; i++)
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+                using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+                {
+                    using (var reader = ExcelReaderFactory.CreateOpenXmlReader(stream))
                     {
-                        if (!string.IsNullOrEmpty(table.Rows[i][2]?.ToString()))
-                        {
-                            config.Inputs.Add(new IOPoint
-                            {
-                                Address = table.Rows[i][2].ToString(),
-                                Name = table.Rows[i][3]?.ToString(),
-                                Description = table.Rows[i][5]?.ToString()
-                            });
-                        }
+                        var ds = reader.AsDataSet();
+                        var table = ds.Tables[0];
 
-                        if (!string.IsNullOrEmpty(table.Rows[i][9]?.ToString()))
+                        for (int i = 2; i < table.Rows.Count; i++)
                         {
-                            config.Outputs.Add(new IOPoint
+                            if (!string.IsNullOrEmpty(table.Rows[i][2]?.ToString()))
                             {
-                                Address = table.Rows[i][9].ToString(),
-                                Name = table.Rows[i][10]?.ToString(),
-                                Description = table.Rows[i][12]?.ToString()
-                            });
+                                config.Inputs.Add(new IOPoint
+                                {
+                                    Address = table.Rows[i][2].ToString(),
+                                    Name = table.Rows[i][3]?.ToString(),
+                                    Description = table.Rows[i][5]?.ToString()
+                                });
+                            }
+
+                            if (!string.IsNullOrEmpty(table.Rows[i][9]?.ToString()))
+                            {
+                                config.Outputs.Add(new IOPoint
+                                {
+                                    Address = table.Rows[i][9].ToString(),
+                                    Name = table.Rows[i][10]?.ToString(),
+                                    Description = table.Rows[i][12]?.ToString()
+                                });
+                            }
                         }
                     }
                 }
+                return config;
             }
-            return config;
         }
 
         #region Excel <--> 对象列表

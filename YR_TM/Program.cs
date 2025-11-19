@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,7 +20,15 @@ namespace YR_TM
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            string lang = FileHelper.ReadJson<string>("SystemLanguage") ?? "zh-CN";
+            string lang;
+            try
+            {
+                lang = FileHelper.ReadJson<string>("SystemLanguage");
+            }
+            catch(FileNotFoundException)
+            {
+                lang = "zh-CN";
+            }
             LanguageManager.ChangeLanguage(lang);
 
             FrameworkContext.StationName = "TAM";
