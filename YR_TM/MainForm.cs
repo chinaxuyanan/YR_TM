@@ -40,9 +40,10 @@ namespace YR_TM
             LanguageManager.LanguageChanged += OnLanguageChanged;
             TestManager.Instance.StateChanged += OnStateChanged;
 
-            LogManager.AddSink(new FileLogSink(new SimpleFormatter(), "Logs", "YR_Test_Log"));
+            LogManager.AddSink(new FileLogSink(new SimpleFormatter(), $"Logs/{DateTime.Now:MMdd}", "YR_Test_Log"));
 
-            TestManager.Instance.InitializeAndReset();
+            TestManager.Instance.Initialize();
+            TestManager.Instance.StartTest();
         }
 
         protected override void OnMenuClicked(string menuName)

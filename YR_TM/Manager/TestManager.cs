@@ -30,59 +30,38 @@ namespace YR_TM.Manager
         private readonly object _lockObj = new object();
 
         private bool _emergencyStop = false;
+        private bool _isPaused = false;
+        private bool _isStopping = false;
+
         public RunState State { get; private set; } = RunState.Idle;
-        public RunMode Mode { get; private set; } = RunMode.Product;
+        public static RunMode Mode = RunMode.Product;
 
         public event Action<RunState> StateChanged;
         public event Action<bool> ConnectBusChanged;
 
         public bool _connectBusState = false;
+        private TestStep currentStep = TestStep.None;
+
+        //IO
+        private const int StartButtonIO = 0;
+        private const int StopButtonIO = 1;
+        private const int RsetButtonIO = 2;
+
 
         private void SetState(RunState state)
         {
-            if(State != state)
+            if (State != state)
             {
                 State = state;
-                StateChanged?.Invoke(state);
+                try { StateChanged?.Invoke(state); } catch { }
 
-                ConnectBusChanged?.Invoke(_connectBusState);
-            }
-        }
-
-        /// <summary>
-        /// 软件启动时调用，初始化加复位，进入Ready状态
-        /// </summary>
-        public void InitializeAndReset()
-        {
-            lock (_lockObj)
-            {
-                //确保旧线程结束
-                _cts?.Cancel();
-                _cts?.Dispose();
-                //创建新的 CTS
-                _cts = new CancellationTokenSource();
-
-                //获取点位
-                GlobalDataPoint.LoadPointListFromJson();
-                var points = GlobalDataPoint.GetPointList();
-                foreach (var point in points)
-                {
-                    logger.Info($"点为名：{point.Name}, X: {point.XValue}, Y: {point.YValue}, Z: {point.ZValue}, R: {point.RValue}");
-                }
-
-                _ = Initialize(_cts.Token);
-
-                //启动监控线程（值启动一次）
-                if(_monitorTask == null || _monitorTask.IsCompleted)
-                {
-                    _monitorTask = Task.Run(() => StartMontiorThread(_cts.Token));
-                }
+                try { ConnectBusChanged?.Invoke(_connectBusState); } catch { }
             }
         }
 
         #region - 初始化 + 复位流程
 
-        private async Task Initialize(CancellationToken token)
+        public void Initialize()
         {
             logger.Info("开始系统初始化...");
             //bool initResult = await Task.Run(() => MotionModule.Instance.Init());
@@ -93,7 +72,14 @@ namespace YR_TM.Manager
             //}
             logger.Info("初始化完成！");
             _connectBusState = true;
-            SetState(State);
+
+            //获取点位
+            GlobalDataPoint.LoadPointListFromJson();
+            var points = GlobalDataPoint.GetPointList();
+            foreach (var point in points)
+            {
+                logger.Info($"点为名：{point.Name}, X: {point.XValue}, Y: {point.YValue}, Z: {point.ZValue}, R: {point.RValue}");
+            }
 
 
             logger.Info("开始复位...");
@@ -104,41 +90,92 @@ namespace YR_TM.Manager
             logger.Info("复位已完成！");
 
             SetState(RunState.Ready);
-            await Task.Delay(200, token);
         }
 
         #endregion
+
+        /// <summary>
+        /// 软件启动时调用，初始化加复位，进入Ready状态
+        /// </summary>
+        public void StartTest()
+        {
+            lock (_lockObj)
+            {
+                //确保旧线程结束
+                _cts?.Cancel();
+                _cts?.Dispose();
+                //创建新的 CTS
+                _cts = new CancellationTokenSource();
+
+                _isPaused = false;
+                _isStopping = false;
+                _emergencyStop = false;
+
+                //启动监控线程（启动一次）
+                if (_monitorTask == null || _monitorTask.IsCompleted)
+                {
+                    _monitorTask = Task.Run(() => StartMontiorThread(_cts.Token));
+                }
+            }
+        }
 
         #region - 启动流程检查 + 开始测试
 
         private async Task StartMontiorThread(CancellationToken token)
         {
-            while (true)
+            try
             {
-                token.ThrowIfCancellationRequested();
-
-                try
+                while (!token.IsCancellationRequested)
                 {
-                    if(State == RunState.Ready)
+                    //急停或停止，等待按钮信号
+                    if(_isStopping || _emergencyStop)
                     {
-                        bool startBtn = false; /*MotionModule.Instance.ReadIoInBit(5);*/
-                        if (startBtn)
-                            await StartTestFlow(token);
+                        await Task.Delay(200, token);
+                        continue;
                     }
+
+                    //生产模式
+                    if ((State == RunState.Ready || State == RunState.PASS || State == RunState.FAIL) && Mode == RunMode.Product)
+                    {
+                        bool startPressed = true; /*MotionModule.Instance.ReadIoInBit(StartButtonIO);*/
+                        if (startPressed)
+                        {
+                            if (!WaitForDoorClosed())
+                            {
+                                SetState(RunState.Error); await Task.Delay(500, token); continue;
+                            }
+
+                            SetState(RunState.Running);
+                            bool result = await StartTestFlow(token);
+                            SetState(result ? RunState.PASS : RunState.FAIL);
+
+                            if (!_emergencyStop && !_isStopping)
+                                SetState(RunState.Ready);
+                        }
+                    }
+                    else if ((State == RunState.Ready || State == RunState.PASS) && Mode == RunMode.DryRun)
+                    {
+                        //空跑
+                    }
+                    else
+                    {
+                        //调试
+                    }
+                    await Task.Delay(5000, token);
                 }
-                catch (TaskCanceledException)
-                {
-                    break;  //正常退出
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"主循环异常：{ex.Message}");
-                }
-                await Task.Delay(100, token);
+            }catch(OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                logger.Error($"异常：{ex.Message}");
             }
+            finally
+            {
+                logger.Info("结束");
+            }
+            
         }
 
-        private async Task StartTestFlow(CancellationToken token)
+        private bool WaitForDoorClosed()
         {
             logger.Info("检查安全光栅、安全门等...");
 
@@ -164,25 +201,26 @@ namespace YR_TM.Manager
             //    logger.Info("急停未释放！");
             //    return;
             //}
+            return true;
+        }
 
-            SetState(RunState.Running);
-            logger.Info("安全检查正常，开始测试流程");
-
-            bool result = await RunAssemblyFlow(token);
-
-            if (result)
+        private async Task<bool> StartTestFlow(CancellationToken token)
+        {
+            try
             {
-                logger.Info("测试完成: PASS");
-                SetState(RunState.PASS);
+                bool result = await RunAssemblyFlow(token);
+                return result;
             }
-            else
+            catch (OperationCanceledException)
             {
-                logger.Info("测试完成: FAIL");
-                SetState(RunState.FAIL);
+                logger.Info("StartTestFlow 取消");
+                return false;
             }
-
-            await Task.Delay(200);
-            SetState(RunState.Ready);
+            catch(Exception ex)
+            {
+                logger.Error($"异常: {ex.Message}");
+                return false;
+            }
         }
 
         #endregion
@@ -193,37 +231,82 @@ namespace YR_TM.Manager
         {
             try
             {
-                // === 1.hodler到上相机位置 ===
-                SetState(RunState.Running);
-                logger.Info("运动到拍照位...");
-                //MotionModule.Instance.AbsMove(0, 200, 20);
-                await Task.Delay(1000, token);
+                if (currentStep == TestStep.None) currentStep = TestStep.Step_0001;
 
-                // === 2. 取排线 + 点胶并行 ===
-                SetState(RunState.Running);
-                logger.Info("取排线 + 点胶...");
-                //Task t1 = Task.Run(() => PickCable());
-                //Task t2 = Task.Run(() => GlueProcess());
-                //await Task.WhenAll(t1, t2);
-                await Task.Delay(1000, token);
+                while (true)
+                {
+                    token.ThrowIfCancellationRequested();
+                    if (_emergencyStop)
+                    {
+                        logger.Warn("急停，退出");
+                        SetState(RunState.Stop);
+                        return false;
+                    }
+                    if (_isPaused)
+                    {
+                        logger.Info("暂停，等待...");
+                        //MotionModule.Instance.StopAxis(3);
+                        SetState(RunState.Paused);
 
-                // === 3. 去组装位组装 ===
-                SetState(RunState.Running);
-                logger.Info("进行组装...");
-                //MotionModule.Instance.AbsMove(0, 30, 30);
-                await Task.Delay(1500, token);
+                        while(_isPaused && !token.IsCancellationRequested && !_emergencyStop && !_isStopping)
+                        {
+                            await Task.Delay(2000, token);
+                        }
 
-                // === 4. 返回原点 ===
-                SetState(RunState.Running);
-                logger.Info("返回初始位置...");
-                //MotionModule.Instance.AbsMove(0, 0, 30);
-                await Task.Delay(1000, token);
+                        if(token.IsCancellationRequested || _emergencyStop || _isStopping)
+                        {
+                            logger.Info("取消/停止/急停，退出");
+                            return false;
+                        }
 
-                return true;
+                        logger.Info("恢复，继续步骤" + currentStep);
+                        SetState(RunState.Running);
+                    }
+
+                    switch (currentStep)
+                    {
+                        case TestStep.Step_0001:
+                            // === 1.hodler到上相机位置 ===
+                            logger.Info("运动到拍照位...");
+                            //MotionModule.Instance.AbsMove(0, 200, 20);
+                            await Task.Delay(2000, token);
+                            currentStep = TestStep.Step_0002;
+                            break;
+                        case TestStep.Step_0002:
+                            // === 2. 取排线 + 点胶并行 ===
+                            logger.Info("取排线 + 点胶...");
+                            //Task t1 = Task.Run(() => PickCable());
+                            //Task t2 = Task.Run(() => GlueProcess());
+                            //await Task.WhenAll(t1, t2);
+                            await Task.Delay(3000, token);
+                            currentStep = TestStep.Step_0003;
+                            break;
+                        case TestStep.Step_0003:
+                            // === 3. 去组装位组装 ===
+                            logger.Info("进行组装...");
+                            //MotionModule.Instance.AbsMove(0, 30, 30);
+                            await Task.Delay(4500, token);
+                            currentStep = TestStep.Step_0004;
+                            break;
+                        case TestStep.Step_0004:
+                            // === 4. 返回原点 ===
+                            logger.Info("返回初始位置...");
+                            //MotionModule.Instance.AbsMove(0, 0, 30);
+                            await Task.Delay(3000, token);
+                            currentStep = TestStep.None;
+                            logger.Info("流程执行完毕");
+                            break;
+                        default:
+                            logger.Warn("结束流程");
+                            return false;
+                    }
+
+                    await Task.Delay(10, token);
+                }
             }
             catch (OperationCanceledException)
             {
-                logger.Error("流程被中断");
+                logger.Info("取消流程");
                 SetState(RunState.Stop);
                 return false;
             }
@@ -250,22 +333,38 @@ namespace YR_TM.Manager
         #endregion
 
         #region - 异常处理
+        
+        public void StopTest()
+        {
+            _isStopping = true;
+            _isPaused = false;
+            _emergencyStop = false;
+            _cts.Cancel();
+            SetState(RunState.Stop);
+        }
+
+        public void PauseTest()
+        {
+            _isPaused = true;
+            SetState(RunState.Paused);
+            logger.Info("测试暂停");
+        }
+
+        public void ResetTest()
+        {
+            _isPaused = false;
+            _isStopping = false;
+            SetState(RunState.Running);
+            logger.Info("收到复位信号继续执行");
+        }
 
         public void EmergencyStop()
         {
             _emergencyStop = true;
-            MotionModule.Instance.StopEmg(1);
-            logger.Warn("急停触发，所有动作停止");
-            SetState(RunState.Stop);
-
+            _isPaused = false;
+            _isStopping = true;
             _cts.Cancel();
-        }
-
-        public void ResumeAfterAlarm()
-        {
-            if (State == RunState.Error || State == RunState.Paused)
-                logger.Info("故障清除， 等待启动");
-                SetState(RunState.Ready);
+            SetState(RunState.EmerStop);
         }
 
         #endregion
