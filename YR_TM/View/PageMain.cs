@@ -39,6 +39,7 @@ namespace YR_TM.View
             InitializeComponent();
             InitializeUI();
 
+
             this.HandleCreated += PageMain_HandleCreated;
 
             TestManager.Instance.ConnectBusChanged += OnConnectBusChanged;
@@ -274,5 +275,7 @@ namespace YR_TM.View
             if(camIndex < 0 || camIndex >= cameraPics.Count) return;
             cameraPics[camIndex].Image = img;
         }
+
+
     }
 }
