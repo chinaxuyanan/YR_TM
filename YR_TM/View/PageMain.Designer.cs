@@ -32,10 +32,11 @@
             // 
             // PageMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "PageMain";
-            this.Size = new System.Drawing.Size(840, 687);
+            this.Size = new System.Drawing.Size(1260, 1030);
             this.ResumeLayout(false);
 
         }
