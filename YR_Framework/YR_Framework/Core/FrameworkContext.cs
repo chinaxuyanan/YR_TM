@@ -5,6 +5,7 @@
     /// </summary>
     public static class FrameworkContext
     {
+        public static string AlarmTestManager => "AlarmManager";
         public static string FrameworkVersion => "1.0.2";
         public static string StationName { get; set; } = "未命名";
 

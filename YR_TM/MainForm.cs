@@ -34,9 +34,17 @@ namespace YR_TM
             InitializeComponent();
             LanguageManager.ApplyResources(this); //应用语言资源
 
+            //虚拟报警数据
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(1, "E101", "急停按钮触发");
+            Thread.Sleep(300);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(1);
+
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(2, "E202", "Z轴限位触发");
+            Thread.Sleep(500);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(2);
+
             //订阅语言改变事件，动态刷新UI
             LanguageManager.LanguageChanged += OnLanguageChanged;
-
             TestManager.Instance.StateChanged += OnStateChanged;
 
             LogManager.AddSink(new FileLogSink(new SimpleFormatter(), $"Logs/{DateTime.Now:MMdd}", "YR_Test_Log"));
@@ -82,7 +90,7 @@ namespace YR_TM
 
         protected override void OnUserChanged(string userName)
         {
-            //ShowControl(new PageMain());
+            ShowControl(new PageMain());
         }
 
         private void OnStateChanged(RunState state)
