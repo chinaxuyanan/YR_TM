@@ -38,12 +38,22 @@ namespace YR_TM
 
             //订阅语言改变事件，动态刷新UI
             LanguageManager.LanguageChanged += OnLanguageChanged;
-            TestManager.Instance.StateChanged += OnStateChanged;
 
             LogManager.AddSink(new FileLogSink(new SimpleFormatter(), $"Logs/{DateTime.Now:MMdd}", "YR_Test_Log"));
 
             TestManager.Instance.Initialize();
-            TestManager.Instance.StartTest();
+
+            TestManager.Instance.StateChanged += OnStateChanged;
+
+            //启动物理按键监控
+            ButtonMonitorManager.Instance.Start();
+
+            EventCenter.Subscribe<ButtonPressedEvent>(evt =>
+            {
+                TestManager.Instance.OnButtonPressed(evt.ButtonType);
+            });
+
+            TestManager.Instance.Start();
         }
 
         protected override void OnMenuClicked(string menuName)

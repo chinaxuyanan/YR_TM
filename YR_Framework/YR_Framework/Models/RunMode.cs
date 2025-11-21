@@ -17,7 +17,8 @@
         Paused,
         Stop,
         EmerStop,
-        Error
+        Error,
+        Maintenance
     }
 
     public enum TestStep
