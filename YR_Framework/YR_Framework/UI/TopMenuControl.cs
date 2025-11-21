@@ -237,17 +237,24 @@ namespace YR_Framework.UI
                     break;
                 case RunState.PASS:
                     lblRunState.ForeColor = Color.LimeGreen;
+                    btnUser.Enabled = true;
                     break;
                 case RunState.Stop:
                     lblRunState.ForeColor = Color.Red;
+                    btnUser.Enabled = true;
                     break;
                 case RunState.EmerStop:
                     lblRunState.ForeColor = Color.Red;
+                    btnUser.Enabled = true;
                     break;
                 case RunState.FAIL:
                     lblRunState.ForeColor = Color.Red;
+                    btnUser.Enabled = true;
                     break;
-                default: lblRunState.ForeColor = Color.White; break;
+                default: 
+                    lblRunState.ForeColor = Color.White;
+                    btnUser.Enabled = true;
+                    break;
             }
         }
 
