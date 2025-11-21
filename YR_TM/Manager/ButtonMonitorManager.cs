@@ -37,7 +37,7 @@ namespace YR_TM.Manager
         {
             while (!token.IsCancellationRequested)
             {
-                bool start = true; /*MotionModule.Instance.ReadIoInBit(1);*/
+                bool start = false; /*MotionModule.Instance.ReadIoInBit(1);*/
                 bool pause = false; /*MotionModule.Instance.ReadIoInBit(2);*/  //停止就对应暂停按钮
                 bool reset = false; /*MotionModule.Instance.ReadIoInBit(3);*/
                 bool estop = false; /*MotionModule.Instance.ReadIoInBit(4);*/

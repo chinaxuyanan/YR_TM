@@ -38,6 +38,7 @@ namespace YR_TM.View
         private ToolStripStatusLabel lblStatus, lblRunMode, lblCurrentTime;
         private Timer timer;
         private Timer axisTimer;
+
         public PageMain()
         {
             InitializeComponent();
@@ -45,7 +46,10 @@ namespace YR_TM.View
 
             this.HandleCreated += PageMain_HandleCreated;
 
-            TestManager.Instance.ConnectBusChanged += OnConnectBusChanged;
+            lblStatus.Text = AppState.IsBusConnected ? LanguageManager.GetString("Lbl_Status_Connect") : LanguageManager.GetString("Lbl_Status_Not_Connect");
+            lblStatus.ForeColor = AppState.IsBusConnected ? Color.LimeGreen : Color.Red;
+
+            //TestManager.Instance.ConnectBusChanged += OnConnectBusChanged;
 
             EventCenter.Subscribe<RunModeChangedEvent>((evt) =>
             {
@@ -82,6 +86,7 @@ namespace YR_TM.View
             if(obj is RunMode runMode)
             {
                 lblRunMode.Text = $"{LanguageManager.GetString("Run_Mode")} {runMode}";
+                AppState.CurrentRunMode = runMode;
                 TestManager.Mode = runMode;
             }
         }
@@ -186,7 +191,7 @@ namespace YR_TM.View
                 BackColor = Color.FromArgb(105, 139, 105),
             };
             lblStatus = new ToolStripStatusLabel(LanguageManager.GetString("Lbl_Status_Not_Connect"));
-            lblRunMode = new ToolStripStatusLabel($"{LanguageManager.GetString("Run_Mode")} Product");
+            lblRunMode = new ToolStripStatusLabel($"{LanguageManager.GetString("Run_Mode")} {AppState.CurrentRunMode}");
             lblCurrentTime = new ToolStripStatusLabel($"{LanguageManager.GetString("Lbl_Time")}：{DateTime.Now:yyyy/yy/dd-HH:mm:ss}");
             lblRunMode.Spring = true;
             lblCurrentTime.Alignment = ToolStripItemAlignment.Right;

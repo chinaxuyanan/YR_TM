@@ -38,7 +38,7 @@ namespace YR_TM.Manager
         public event Action<RunState> StateChanged;
         public event Action<bool> ConnectBusChanged;
 
-        private bool _connectBusState = false;
+        public static bool _connectBusState = false;
 
         public RunState State => _stateMachine.State;
 
@@ -48,12 +48,11 @@ namespace YR_TM.Manager
             //MotionModule.Instance.Init();
 
             _flow.ResetStep();
-            _connectBusState = true;
+            //_connectBusState = true;
+            AppState.IsBusConnected = true;
             _stateMachine.SetState(RunState.Ready);
             logger.Info("初始化完成，进入 Ready 状态");
-
-            StateChanged?.Invoke(RunState.Ready);
-            ConnectBusChanged?.Invoke(_connectBusState);
+            StateChanged?.Invoke(State);
         }
 
         public void Start()

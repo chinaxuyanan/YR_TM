@@ -41,5 +41,6 @@
         public static UserLevel CurrentUser { get; set; } = UserLevel.Operator;
         public static RunMode CurrentRunMode { get; set; } = RunMode.Product;
         public static RunState CurrentRunState { get; set; } = RunState.Idle;
+        public static bool IsBusConnected { get; set; } = false;
     }
 }

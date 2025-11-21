@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger.Alarm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,5 +45,14 @@ namespace Logger
         ///写入致命错误日志（严重问题可能导致程序崩溃）
         /// </summary>
         void Fatal(string message, Exception ex = null);
+
+        //添加GetAlarmManager方法
+        AlarmManager GetAlarmManager();
+
+        //添加报警信息
+        void LogAlarm(int id, string alarmCode, string message);
+
+        //结束报警
+        void EndAlarm(int id);
     }
 }
