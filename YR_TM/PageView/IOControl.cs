@@ -30,7 +30,9 @@ namespace YR_TM.PageView
 
         private void LoadIOConfig()
         {
-            _ioConfig = FileHelper.ReadIOExcel(new IOFilePath().TAMFilePath);
+            //_ioConfig = FileHelper.ReadIOExcel(new IOFilePath().TAMFilePath);
+            _ioConfig = IO_ConfigHelper.GetIOEnumConfig(); 
+
         }
 
         private void InitializeUI()
@@ -68,16 +70,20 @@ namespace YR_TM.PageView
             dgvInput.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 70, 70);
             dgvInput.DefaultCellStyle.SelectionForeColor = Color.White;
 
+            dgvInput.Columns.Add("Address", LanguageManager.GetString("SignalAddressInput_Text"));
             dgvInput.Columns.Add("Signal", LanguageManager.GetString("Signal_Text"));
             dgvInput.Columns.Add("State", LanguageManager.GetString("State_Text"));
-            dgvInput.Columns[0].Width = 200;
-            dgvInput.Columns[1].Width = 100;
+            
+            dgvInput.Columns[0].Width = 100;
+            dgvInput.Columns[1].Width = 300;
+            dgvInput.Columns[2].Width = 200;
             split.Panel1.Controls.Add(dgvInput);
 
             foreach (var input in _ioConfig.Inputs)
             {
                 if (!string.IsNullOrEmpty(input.Name))
-                    dgvInput.Rows.Add(input.Name, (input.State ? "ON" : "OFF"));
+                    //dgvInput.Rows.Add(input.Name, (input.State ? "ON" : "OFF"));
+                    dgvInput.Rows.Add(input.Address,input.Name, (input.State ? "ON" : "OFF"));
             }
 
             // --- 右侧输出区 ---
@@ -125,8 +131,8 @@ namespace YR_TM.PageView
             //TODO: 实际从EtherCat总线读取输入状态
             foreach (DataGridViewRow row in dgvInput.Rows)
             {
-                string state = (row.Cells[1].Value?.ToString() == "ON") ? "OFF" : "ON";
-                row.Cells[1].Value = state;
+                string state = (row.Cells[2].Value?.ToString() == "ON") ? "OFF" : "ON";
+                row.Cells[2].Value = state;
             }
         }
 
@@ -154,5 +160,7 @@ namespace YR_TM.PageView
             };
             return btn;
         }
+
+
     }
 }

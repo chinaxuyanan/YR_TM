@@ -286,6 +286,15 @@ namespace YR_TM.Lang {
         }
         
         /// <summary>
+        ///   查找类似 断开连接 的本地化字符串。
+        /// </summary>
+        internal static string DisConnect_Text {
+            get {
+                return ResourceManager.GetString("DisConnect_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 点胶X轴 的本地化字符串。
         /// </summary>
         internal static string DispensingX_Text {
@@ -565,6 +574,24 @@ namespace YR_TM.Lang {
         }
         
         /// <summary>
+        ///   查找类似 请选择端口号或波特率 的本地化字符串。
+        /// </summary>
+        internal static string PortAndBaudError_NoSelected {
+            get {
+                return ResourceManager.GetString("PortAndBaudError_NoSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 提示 的本地化字符串。
+        /// </summary>
+        internal static string Prompt {
+            get {
+                return ResourceManager.GetString("Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 R轴 的本地化字符串。
         /// </summary>
         internal static string RAxis {
@@ -669,6 +696,15 @@ namespace YR_TM.Lang {
         internal static string Signal_Text {
             get {
                 return ResourceManager.GetString("Signal_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 输入信号地址 的本地化字符串。
+        /// </summary>
+        internal static string SignalAddressInput_Text {
+            get {
+                return ResourceManager.GetString("SignalAddressInput_Text", resourceCulture);
             }
         }
         

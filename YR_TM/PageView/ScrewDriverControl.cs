@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+﻿using DeviceCommLib.Implementation;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,11 @@ namespace YR_TM.PageView
         private ComboBox cmbPort, cmbBaud;
         private Button btnConnect, btnStart, btnStop, btnReadTorque, btnReadAngle;
         private Label lblTorque, lblAngle, lblStatus;
+
+
+        private ElectricScrewdrivers _electricScrewdrivers;
+
+        private bool _ScrewdriverConnectStatus = false;
 
         public ScrewDriverControl()
         {
@@ -52,6 +58,11 @@ namespace YR_TM.PageView
             btnConnect = CreateButton(LanguageManager.GetString("Connect_Text"), new Point(500, 10), 100);
             panelCom.Controls.AddRange(new Control[] { lblCom, cmbPort, lblBaud, cmbBaud, btnConnect });
             mainLayout.Controls.Add(panelCom, 0, 0);
+
+
+            btnConnect.Click += BtnConnect_Click;
+
+
 
             // --- 电批操作区 ---
             var groupOperation = new GroupBox
@@ -115,6 +126,44 @@ namespace YR_TM.PageView
             mainLayout.Controls.Add(groupStatus, 0, 2);
 
             this.Controls.Add(mainLayout);
+        }
+
+        private void BtnConnect_Click(object sender, EventArgs e)
+        {
+            if (cmbPort.SelectedIndex == -1 || cmbBaud.SelectedIndex==-1)
+            {
+                MessageBox.Show(LanguageManager.GetString("PortAndBaudError_NoSelected"), LanguageManager.GetString("Prompt"));
+                return;
+            }
+            if (_electricScrewdrivers == null)
+            {
+                _electricScrewdrivers = new ElectricScrewdrivers(cmbPort.SelectedItem.ToString(), int.Parse(cmbBaud.SelectedItem.ToString()));
+
+            }
+
+            if (_electricScrewdrivers.ConnectStatus != true)
+            {
+                if (_electricScrewdrivers.Connect())
+                {
+                    _ScrewdriverConnectStatus = true;
+                }
+                else
+                {
+                    _ScrewdriverConnectStatus = false;
+                }
+            }
+            else
+            {
+                _ScrewdriverConnectStatus = false;
+            }
+            //更新连接按钮装
+            if (_ScrewdriverConnectStatus == true)
+                    btnConnect.Text = LanguageManager.GetString("DisConnect_Text");
+            else
+            {
+                btnConnect.Text = LanguageManager.GetString("Connect_Text");
+            }
+
         }
 
         private Button CreateButton(string text, Point location, int width = 120)
