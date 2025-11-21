@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YR_Framework.Core;
 using YR_TM.Utils;
 
 namespace YR_TM.View
@@ -193,11 +195,19 @@ namespace YR_TM.View
 
         private void BtnQuery_Click(object sender, EventArgs e)
         {
+            DateTime startTime = dtpStart.Value;
+            DateTime endTime = dtpEnd.Value;
+
+            var alarmManager = LogManager.GetLogger(FrameworkContext.AlarmTestManager).GetAlarmManager();
+            var filteredAlarms = alarmManager.AlarmHistory.Where(a => a.StartTime >= startTime && a.EndTime <= endTime).ToList();
+
             //模拟查询数据
             dgvAlarm.Rows.Clear();
 
-            dgvAlarm.Rows.Add("1", "E101", "急停按钮触发", "2025-11-07 10:30:22", "2025-11-07 10:32:00", "00:01:38");
-            dgvAlarm.Rows.Add("2", "E202", "Z轴限位触发", "2025-11-07 11:10:05", "2025-11-07 11:11:02", "00:00:57");
+            foreach (var alarm in filteredAlarms)
+            {
+                dgvAlarm.Rows.Add(alarm.ID, alarm.AlarmCode, alarm.Message, alarm.StartTime, alarm.EndTime, alarm.Duration);
+            }
         }
 
         private void ExportToCsv(string filePath)

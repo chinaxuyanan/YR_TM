@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Logger.Alarm;
 
 namespace Logger
 {
@@ -28,6 +29,8 @@ namespace Logger
         //保存后台Task，确保退出时能等待
         private readonly Task _workerTask;
 
+        private readonly AlarmManager _alarmManager = new AlarmManager();
+
         /// <summary>
         /// 创建新的logger实例
         /// </summary>
@@ -49,12 +52,21 @@ namespace Logger
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default
             );
+        }
 
-            //启动后台日志线程
-            //Task.Factory.StartNew(ProcessLogQueue,
-            //    _cancellation.Token,
-            //    TaskCreationOptions.LongRunning,
-            //    TaskScheduler.Default);
+        public void LogAlarm(int id, string alarmCode, string message)
+        {
+            _alarmManager.AddAlarm(id, alarmCode, message);
+        }
+
+        public void EndAlarm(int id)
+        {
+            _alarmManager.ResolveAlarm(id);
+        }
+
+        public AlarmManager GetAlarmManager()
+        {
+            return _alarmManager;
         }
 
         /// <summary>
@@ -81,7 +93,6 @@ namespace Logger
                 //TryAdd 不阻塞，避免暴涨
                 _logQueue.TryAdd(log);
             }
-            //_logQueue.Add(log);
         }
 
         #region - 快捷日志方法
@@ -151,11 +162,6 @@ namespace Logger
             {
 
             }
-
-            //_logQueue.CompleteAdding();
-            //_cancellation.Cancel();
         }
-
-
     }
 }

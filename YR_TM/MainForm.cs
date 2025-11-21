@@ -36,6 +36,15 @@ namespace YR_TM
 
             LanguageManager.ApplyResources(this); //应用语言资源
 
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(1, "E101", "急停按钮触发");
+            Thread.Sleep(300);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(1);
+
+
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(2, "E202", "Z轴限位触发");
+            Thread.Sleep(500);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(2);
+
             //订阅语言改变事件，动态刷新UI
             LanguageManager.LanguageChanged += OnLanguageChanged;
             TestManager.Instance.StateChanged += OnStateChanged;
