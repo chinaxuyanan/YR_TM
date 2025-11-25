@@ -47,11 +47,17 @@ namespace YR_TM
             LanguageManager.LanguageChanged += OnLanguageChanged;
             TestManager.Instance.StateChanged += OnStateChanged;
 
-            LogManager.AddSink(new FileLogSink(new SimpleFormatter(), $"Logs/{DateTime.Now:MMdd}", "YR_Test_Log"));
-
             TestManager.Instance.Initialize();
 
             ShowControl(new PageMain());
+            LogManager.AddSink(new FileLogSink(new SimpleFormatter(), $"Logs/{DateTime.Now:MMdd}", "YR_Test_Log"));
+
+            StartInitializeMotionManager();
+        }
+
+        private void StartInitializeMotionManager()
+        {
+            logger.Info(AppState.IsBusConnected ? "初始化完成，进入 Ready 状态" : "初始化失败！");
 
             EventCenter.Subscribe<ButtonPressedEvent>(evt =>
             {

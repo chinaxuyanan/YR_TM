@@ -44,14 +44,11 @@ namespace YR_TM.Manager
 
         public void Initialize()
         {
-            logger.Info("系统初始化...");
-            //MotionModule.Instance.Init();
+            MotionModule.Instance.Init();
 
             _flow.ResetStep();
-            //_connectBusState = true;
             AppState.IsBusConnected = true;
             _stateMachine.SetState(RunState.Ready);
-            logger.Info("初始化完成，进入 Ready 状态");
             StateChanged?.Invoke(State);
         }
 
