@@ -205,7 +205,7 @@ namespace YR_TM.View
 
             foreach (var alarm in filteredAlarms)
             {
-                dgvAlarm.Rows.Add(alarm.ID, alarm.AlarmCode, alarm.Message, alarm.StartTime, alarm.EndTime, alarm.Duration);
+                dgvAlarm.Rows.Add(alarm.ID, alarm.AlarmCode, alarm.Message, alarm.GetFormattedStartTime(), alarm.GetFormattedEndTime(), alarm.Duration);
             }
         }
 

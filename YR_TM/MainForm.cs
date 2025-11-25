@@ -20,6 +20,7 @@ using YR_TM.Modules;
 using YR_TM.Utils;
 using YR_TM.Manager;
 using System.Net.Configuration;
+using Logger.Alarm;
 
 namespace YR_TM
 {
@@ -35,13 +36,13 @@ namespace YR_TM
             LanguageManager.ApplyResources(this); //应用语言资源
 
             //虚拟报警数据
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(1, "E101", "急停按钮触发");
+            int alarmId = LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(ErrorType.Err_Emg, "急停按钮触发");
             Thread.Sleep(300);
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(1);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(alarmId);
 
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(2, "E202", "Z轴限位触发");
+            alarmId = LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(ErrorType.Err_Motion_Stop, "轴停止错误");
             Thread.Sleep(500);
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(2);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(alarmId);
 
             //订阅语言改变事件，动态刷新UI
             LanguageManager.LanguageChanged += OnLanguageChanged;
