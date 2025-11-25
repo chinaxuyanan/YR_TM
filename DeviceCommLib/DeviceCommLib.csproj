@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Base\DeviceBase.cs" />
     <Compile Include="Ethernet\EthernetConnection.cs" />
+    <Compile Include="Implementation\ElectricScrewdrivers.cs" />
     <Compile Include="Interfaces\IDeviceConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serial\SerialConnection.cs" />
