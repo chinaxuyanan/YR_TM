@@ -70,6 +70,7 @@ namespace YR_TM
             TestManager.Instance.Start();
         }
 
+
         protected override void OnMenuClicked(string menuName)
         {
             switch (menuName)

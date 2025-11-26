@@ -44,6 +44,7 @@ namespace YR_TM.View
             InitializeComponent();
             InitializeUI();
 
+
             this.HandleCreated += PageMain_HandleCreated;
 
             lblStatus.Text = AppState.IsBusConnected ? LanguageManager.GetString("Lbl_Status_Connect") : LanguageManager.GetString("Lbl_Status_Not_Connect");
@@ -299,5 +300,7 @@ namespace YR_TM.View
             if(camIndex < 0 || camIndex >= cameraPics.Count) return;
             cameraPics[camIndex].Image = img;
         }
+
+
     }
 }

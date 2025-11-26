@@ -57,7 +57,6 @@ namespace Logger
         public int LogAlarm(ErrorType alarmCode, string message)
         {
            return _alarmManager.AddAlarm(alarmCode, message);
-        }
 
         public void EndAlarm(int id)
         {

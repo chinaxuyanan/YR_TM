@@ -31,7 +31,6 @@ namespace DeviceCommLib.Implementation
         public ElectricScrewdrivers(string portName,int port)
         {
             _eletricScrewdriver = ConnectionFactory.CreateConnection("serial", portName,port);
-
       
             _eletricScrewdriver.OnDataReceived +=OnDataReceived;
 

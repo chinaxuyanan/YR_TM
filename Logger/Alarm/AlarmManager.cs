@@ -17,7 +17,6 @@ namespace Logger.Alarm
         public int AddAlarm(ErrorType alarmCode, string messae)
         {
             var id = GenerateAlarmID();
-
             var alarm = new AlarmMessage
             {
                 ID = id,
@@ -29,7 +28,6 @@ namespace Logger.Alarm
             _alarmHistory.Add(alarm);
 
             LogManager.GetLogger("AlarmManager").Log(LogLevel.Error, $"Alarm ID：{id}, Code: {alarmCode}, Message: {messae}");
-
             return id;
         }
 
