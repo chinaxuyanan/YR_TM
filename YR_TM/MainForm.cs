@@ -26,7 +26,7 @@ namespace YR_TM
 {
     public partial class MainForm : BaseMainForm
     {
-        private ILogger logger = LogManager.GetLogger("MainForm");
+        private readonly ILogger logger = LogManager.GetLogger("MainForm");
 
         public TopMenuControl TopMenuControl => topMenu;
 
@@ -69,7 +69,6 @@ namespace YR_TM
             ButtonMonitorManager.Instance.Start();
             TestManager.Instance.Start();
         }
-
 
         protected override void OnMenuClicked(string menuName)
         {

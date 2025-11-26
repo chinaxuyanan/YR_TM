@@ -45,6 +45,9 @@ namespace YR_TM.Manager
         public void Initialize()
         {
             MotionModule.Instance.Init();
+
+            //复位
+
             _flow.ResetStep();
             AppState.IsBusConnected = true;
             _stateMachine.SetState(RunState.Ready);
