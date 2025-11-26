@@ -87,7 +87,7 @@ namespace YR_Framework.UI
                 Width = 120,
                 Height = 60,
                 ForeColor = Color.LightGreen,
-                Font = new Font("微软雅黑", 12, FontStyle.Bold),
+                Font = new Font("微软雅黑", 20, FontStyle.Bold),
                 Margin = new Padding(10, 10, 10, 10),
                 TextAlign = ContentAlignment.MiddleCenter,
                 BorderStyle = BorderStyle.FixedSingle
@@ -237,21 +237,24 @@ namespace YR_Framework.UI
                     break;
                 case RunState.PASS:
                     lblRunState.ForeColor = Color.LimeGreen;
-                    btnUser.Enabled = false;
+                    btnUser.Enabled = true;
                     break;
                 case RunState.Stop:
                     lblRunState.ForeColor = Color.Red;
-                    btnUser.Enabled = false;
+                    btnUser.Enabled = true;
                     break;
                 case RunState.EmerStop:
                     lblRunState.ForeColor = Color.Red;
-                    btnUser.Enabled = false;
+                    btnUser.Enabled = true;
                     break;
                 case RunState.FAIL:
                     lblRunState.ForeColor = Color.Red;
-                    btnUser.Enabled = false;
+                    btnUser.Enabled = true;
                     break;
-                default: lblRunState.ForeColor = Color.White; break;
+                default: 
+                    lblRunState.ForeColor = Color.White;
+                    btnUser.Enabled = true;
+                    break;
             }
         }
 

@@ -20,6 +20,7 @@ using YR_TM.Modules;
 using YR_TM.Utils;
 using YR_TM.Manager;
 using System.Net.Configuration;
+using Logger.Alarm;
 
 namespace YR_TM
 {
@@ -32,26 +33,41 @@ namespace YR_TM
         public MainForm()
         {
             InitializeComponent();
-            ShowControl(new PageMain());
-
             LanguageManager.ApplyResources(this); //应用语言资源
 
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(1, "E101", "急停按钮触发");
+            //虚拟报警数据
+            int alarmId = LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(ErrorType.Err_Emg, "急停按钮触发");
             Thread.Sleep(300);
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(1);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(alarmId);
 
-
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(2, "E202", "Z轴限位触发");
+            alarmId = LogManager.GetLogger(FrameworkContext.AlarmTestManager).LogAlarm(ErrorType.Err_Motion_Stop, "轴停止错误");
             Thread.Sleep(500);
-            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(2);
+            LogManager.GetLogger(FrameworkContext.AlarmTestManager).EndAlarm(alarmId);
 
             //订阅语言改变事件，动态刷新UI
             LanguageManager.LanguageChanged += OnLanguageChanged;
             TestManager.Instance.StateChanged += OnStateChanged;
 
-            LogManager.AddSink(new FileLogSink(new SimpleFormatter(), "Logs", "YR_Test_Log"));
+            TestManager.Instance.Initialize();
 
-            TestManager.Instance.InitializeAndReset();
+            ShowControl(new PageMain());
+            LogManager.AddSink(new FileLogSink(new SimpleFormatter(), $"Logs/{DateTime.Now:MMdd}", "YR_Test_Log"));
+
+            StartInitializeMotionManager();
+        }
+
+        private void StartInitializeMotionManager()
+        {
+            logger.Info(AppState.IsBusConnected ? "初始化完成，进入 Ready 状态" : "初始化失败！");
+
+            EventCenter.Subscribe<ButtonPressedEvent>(evt =>
+            {
+                TestManager.Instance.OnButtonPressed(evt.ButtonType);
+            });
+
+            //启动物理按键监控
+            ButtonMonitorManager.Instance.Start();
+            TestManager.Instance.Start();
         }
 
 

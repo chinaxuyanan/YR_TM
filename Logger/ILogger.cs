@@ -50,7 +50,7 @@ namespace Logger
         AlarmManager GetAlarmManager();
 
         //添加报警信息
-        void LogAlarm(int id, string alarmCode, string message);
+        int LogAlarm(ErrorType alarmCode, string message);
 
         //结束报警
         void EndAlarm(int id);

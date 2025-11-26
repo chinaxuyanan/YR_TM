@@ -15,6 +15,7 @@ using YR_TM.Utils;
 using YR_Framework.Events;
 using YR_Framework.Models;
 using YR_TM.Manager;
+using YR_TM.Modules;
 
 namespace YR_TM.View
 {
@@ -28,12 +29,16 @@ namespace YR_TM.View
         private RichTextBox txtLog;
         private List<PictureBox> cameraPics = new List<PictureBox>();
 
+        private Label lblAxis;
+
         private DataGridView alarmDataGridView;
 
         //底部状态栏
         private StatusStrip statusStrip;
         private ToolStripStatusLabel lblStatus, lblRunMode, lblCurrentTime;
         private Timer timer;
+        private Timer axisTimer;
+
         public PageMain()
         {
             InitializeComponent();
@@ -42,7 +47,10 @@ namespace YR_TM.View
 
             this.HandleCreated += PageMain_HandleCreated;
 
-            TestManager.Instance.ConnectBusChanged += OnConnectBusChanged;
+            lblStatus.Text = AppState.IsBusConnected ? LanguageManager.GetString("Lbl_Status_Connect") : LanguageManager.GetString("Lbl_Status_Not_Connect");
+            lblStatus.ForeColor = AppState.IsBusConnected ? Color.LimeGreen : Color.Red;
+
+            //TestManager.Instance.ConnectBusChanged += OnConnectBusChanged;
 
             EventCenter.Subscribe<RunModeChangedEvent>((evt) =>
             {
@@ -54,6 +62,18 @@ namespace YR_TM.View
             timer = new Timer { Interval = 1000 };
             timer.Tick += Timer_Tick;
             timer.Start();
+
+            axisTimer = new Timer { Interval = 50 };
+            axisTimer.Tick += AxisTimer_Tick;
+            axisTimer.Start();
+        }
+
+        private void AxisTimer_Tick(object sender, EventArgs e)
+        {
+            double axisX = 1; /*MotionModule.Instance.GetAixsPos(0);*/
+            double axisY = 2.4; /*MotionModule.Instance.GetAixsPos(1);*/
+            double axisZ = 3.6; /*MotionModule.Instance.GetAixsPos(2);*/
+            lblAxis.Text = $"AxisX: {axisX:F3}\nAxisY: {axisY:F3}\nAxisZ: {axisZ:F3}\nSN: 123456789";
         }
 
         private void OnConnectBusChanged(bool isConnected)
@@ -65,7 +85,11 @@ namespace YR_TM.View
         private void OnRunModeChangedFromTopMenu(object obj)
         {
             if(obj is RunMode runMode)
+            {
                 lblRunMode.Text = $"{LanguageManager.GetString("Run_Mode")} {runMode}";
+                AppState.CurrentRunMode = runMode;
+                TestManager.Mode = runMode;
+            }
         }
 
         private void PageMain_HandleCreated(object sender, EventArgs e)
@@ -116,6 +140,7 @@ namespace YR_TM.View
                 BackColor = Color.FromArgb(105, 105, 105),
                 BorderStyle = BorderStyle.None
             };
+
             panelLog.Controls.Add(txtLog);
 
             var lblLog = new Label
@@ -167,7 +192,7 @@ namespace YR_TM.View
                 BackColor = Color.FromArgb(105, 139, 105),
             };
             lblStatus = new ToolStripStatusLabel(LanguageManager.GetString("Lbl_Status_Not_Connect"));
-            lblRunMode = new ToolStripStatusLabel($"{LanguageManager.GetString("Run_Mode")} Product");
+            lblRunMode = new ToolStripStatusLabel($"{LanguageManager.GetString("Run_Mode")} {AppState.CurrentRunMode}");
             lblCurrentTime = new ToolStripStatusLabel($"{LanguageManager.GetString("Lbl_Time")}：{DateTime.Now:yyyy/yy/dd-HH:mm:ss}");
             lblRunMode.Spring = true;
             lblCurrentTime.Alignment = ToolStripItemAlignment.Right;
@@ -248,10 +273,10 @@ namespace YR_TM.View
                     SizeMode = PictureBoxSizeMode.Zoom,
                 };
 
-                Label lbl = new Label
+                lblAxis = new Label
                 {
                     Dock = DockStyle.Bottom,
-                    Height =80,
+                    Height = 80,
                     Text = $"AxisX: 0.000\nAxisY: 0.000\nAxisZ: 0.000\nSN: 123456789",
                     TextAlign = ContentAlignment.MiddleLeft,
                     ForeColor = Color.White,
@@ -259,7 +284,7 @@ namespace YR_TM.View
                     BackColor = Color.FromArgb(60, 60, 60)
                 };
 
-                camPanel.Controls.Add(lbl);
+                camPanel.Controls.Add(lblAxis);
                 camPanel.Controls.Add(pic);
 
                 splitContainer.Panel1.Controls.Add(camPanel);

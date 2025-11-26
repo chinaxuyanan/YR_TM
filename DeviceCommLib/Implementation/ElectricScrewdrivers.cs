@@ -28,10 +28,9 @@ namespace DeviceCommLib.Implementation
 
         public bool IsHex = true;
 
-        public ElectricScrewdrivers(string portName)
+        public ElectricScrewdrivers(string portName,int port)
         {
-            _eletricScrewdriver = ConnectionFactory.CreateConnection("serial", portName);
-
+            _eletricScrewdriver = ConnectionFactory.CreateConnection("serial", portName,port);
       
             _eletricScrewdriver.OnDataReceived +=OnDataReceived;
 

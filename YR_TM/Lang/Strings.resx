@@ -192,6 +192,9 @@
   <data name="Device_Text" xml:space="preserve">
     <value>设备类型: </value>
   </data>
+  <data name="DisConnect_Text" xml:space="preserve">
+    <value>断开连接</value>
+  </data>
   <data name="DispensingX_Text" xml:space="preserve">
     <value>点胶X轴</value>
   </data>
@@ -285,6 +288,12 @@
   <data name="Point_Text" xml:space="preserve">
     <value>点位名称</value>
   </data>
+  <data name="PortAndBaudError_NoSelected" xml:space="preserve">
+    <value>请选择端口号或波特率</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>提示</value>
+  </data>
   <data name="RAxis" xml:space="preserve">
     <value>R轴</value>
   </data>
@@ -317,6 +326,9 @@
   </data>
   <data name="Serial_Text" xml:space="preserve">
     <value>串口号：</value>
+  </data>
+  <data name="SignalAddressInput_Text" xml:space="preserve">
+    <value>输入信号地址</value>
   </data>
   <data name="Signal_Text" xml:space="preserve">
     <value>输入信号</value>

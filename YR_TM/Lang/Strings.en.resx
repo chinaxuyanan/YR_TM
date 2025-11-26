@@ -192,6 +192,9 @@
   <data name="Device_Text" xml:space="preserve">
     <value>Device Type: </value>
   </data>
+  <data name="DisConnect_Text" xml:space="preserve">
+    <value>DisConnect</value>
+  </data>
   <data name="DispensingX_Text" xml:space="preserve">
     <value>X-Axis for Dispensing</value>
   </data>
@@ -285,6 +288,12 @@
   <data name="Point_Text" xml:space="preserve">
     <value>Point Name</value>
   </data>
+  <data name="PortAndBaudError_NoSelected" xml:space="preserve">
+    <value>Please select a port number or baud rate</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>Prompt</value>
+  </data>
   <data name="RAxis" xml:space="preserve">
     <value>R-Axis</value>
   </data>
@@ -317,6 +326,9 @@
   </data>
   <data name="Serial_Text" xml:space="preserve">
     <value>Serial Port Number:</value>
+  </data>
+  <data name="SignalAddressInput_Text" xml:space="preserve">
+    <value>SignalAddress</value>
   </data>
   <data name="Signal_Text" xml:space="preserve">
     <value>Input Signal</value>

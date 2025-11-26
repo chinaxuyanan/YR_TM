@@ -201,12 +201,11 @@ namespace YR_TM.View
             var alarmManager = LogManager.GetLogger(FrameworkContext.AlarmTestManager).GetAlarmManager();
             var filteredAlarms = alarmManager.AlarmHistory.Where(a => a.StartTime >= startTime && a.EndTime <= endTime).ToList();
 
-            //模拟查询数据
             dgvAlarm.Rows.Clear();
 
             foreach (var alarm in filteredAlarms)
             {
-                dgvAlarm.Rows.Add(alarm.ID, alarm.AlarmCode, alarm.Message, alarm.StartTime, alarm.EndTime, alarm.Duration);
+                dgvAlarm.Rows.Add(alarm.ID, alarm.AlarmCode, alarm.Message, alarm.GetFormattedStartTime(), alarm.GetFormattedEndTime(), alarm.Duration);
             }
         }
 

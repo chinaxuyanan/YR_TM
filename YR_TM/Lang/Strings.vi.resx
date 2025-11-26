@@ -192,6 +192,9 @@
   <data name="Device_Text" xml:space="preserve">
     <value>Loại thiết bị: </value>
   </data>
+  <data name="DisConnect_Text" xml:space="preserve">
+    <value>Ngắt kết nối </value>
+  </data>
   <data name="DispensingX_Text" xml:space="preserve">
     <value>Trục X cho việc phun keo</value>
   </data>
@@ -285,6 +288,12 @@
   <data name="Point_Text" xml:space="preserve">
     <value>Tên điểm</value>
   </data>
+  <data name="PortAndBaudError_NoSelected" xml:space="preserve">
+    <value>Vui lòng chọn số cổng hoặc tốc độ baud</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>Đề xuất</value>
+  </data>
   <data name="RAxis" xml:space="preserve">
     <value>Trục R</value>
   </data>
@@ -317,6 +326,9 @@
   </data>
   <data name="Serial_Text" xml:space="preserve">
     <value>Số hiệu cổng COM:</value>
+  </data>
+  <data name="SignalAddressInput_Text" xml:space="preserve">
+    <value>Địa chỉ tín hiệu</value>
   </data>
   <data name="Signal_Text" xml:space="preserve">
     <value>Tín hiệu đầu vào</value>

@@ -31,4 +31,10 @@ namespace YR_Framework.Events
     {
         public string CurrentTopMenu {  get; set; }
     }
+
+    public class ButtonPressedEvent
+    {
+        public ButtonType ButtonType { get; }
+        public ButtonPressedEvent(ButtonType type) => ButtonType = type;
+    }
 }
