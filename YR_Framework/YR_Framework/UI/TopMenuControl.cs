@@ -87,7 +87,7 @@ namespace YR_Framework.UI
                 Width = 120,
                 Height = 60,
                 ForeColor = Color.LightGreen,
-                Font = new Font("微软雅黑", 12, FontStyle.Bold),
+                Font = new Font("微软雅黑", 20, FontStyle.Bold),
                 Margin = new Padding(10, 10, 10, 10),
                 TextAlign = ContentAlignment.MiddleCenter,
                 BorderStyle = BorderStyle.FixedSingle
