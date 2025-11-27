@@ -31,7 +31,7 @@ namespace YR_TM.Manager
                     switch (_step)
                     {
                         case TestStep.None:
-                            logger.Info("Step1: 去拍照位");
+                            MAGTestAction.MoveUpCamera();
                             await DelayMove(2000, token, state);
                             _step = TestStep.Step_0001;
                             break;

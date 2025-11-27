@@ -31,7 +31,7 @@ namespace YR_TM
             }
             LanguageManager.ChangeLanguage(lang);
 
-            FrameworkContext.StationName = "TAM";
+            FrameworkContext.StationName = "MAG";
             Application.Run(new MainForm());
         }
     }

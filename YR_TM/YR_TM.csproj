@@ -125,10 +125,13 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Manager\AxisInfo.cs" />
     <Compile Include="Manager\ButtonHandler.cs" />
     <Compile Include="Manager\ButtonMonitorManager.cs" />
     <Compile Include="Manager\FlowController.cs" />
+    <Compile Include="Manager\MAGTestAction.cs" />
     <Compile Include="Manager\StateMachine.cs" />
+    <Compile Include="Manager\TAMTestAction.cs" />
     <Compile Include="Modules\ecat_motion.cs" />
     <Compile Include="Modules\IOManager.cs" />
     <Compile Include="Modules\MotionManager.cs" />

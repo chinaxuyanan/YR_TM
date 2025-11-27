@@ -44,12 +44,9 @@ namespace YR_TM.Manager
 
         public void Initialize()
         {
-            MotionModule.Instance.Init();
-
-            //复位
-
+            AppState.IsBusConnected = MotionModule.Instance.Init();
             _flow.ResetStep();
-            AppState.IsBusConnected = true;
+            GetOriginPointAndReset();
             _stateMachine.SetState(RunState.Ready);
             StateChanged?.Invoke(State);
         }
@@ -73,6 +70,35 @@ namespace YR_TM.Manager
                 }
 
                 await Task.Delay(50, token);
+            }
+        }
+
+        private void GetOriginPointAndReset()
+        {
+            //获取点位
+            GlobalDataPoint.LoadPointListFromJson();
+            var points = GlobalDataPoint.GetPointList();
+            foreach (var point in points)
+            {
+                //获取原点
+                logger.Info($"点为名：{point.Name}, X: {point.XValue}, Y: {point.YValue}, Z: {point.ZValue}, R: {point.RValue}");
+            }
+
+            for (int axis = 1; axis <= MotionModule.Instance.m_tResoures.AxisNum; axis++)
+            {
+                MotionModule.Instance.ClearError(axis);
+                MotionModule.Instance.ServoOn(axis);
+                MotionModule.Instance.Home(axis, (int)HomeMode.ORG_N);
+
+                bool isHomeingComplete = (MotionModule.Instance.GetMotionState(axis) & 0x20000) == 0x20000; //检查bit17是否为1
+                if (isHomeingComplete)
+                {
+                    logger.Info($"轴 {axis} 回零完成！");
+                    if (MotionModule.Instance.m_tResoures.AxisNum > 3)
+                        MotionModule.Instance.AbsMove((int)AxisInfo.TAMAxis.Y, 0, 10000);
+                    else
+                        MotionModule.Instance.AbsMove((int)AxisInfo.MAGAxis.Y, 0, 10000);
+                }
             }
         }
 

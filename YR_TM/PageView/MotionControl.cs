@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using YR_TM.Utils;
 using YR_TM.Modules;
+using YR_TM.Manager;
+using YR_Framework.Core;
 
 namespace YR_TM.PageView
 {
@@ -21,11 +23,20 @@ namespace YR_TM.PageView
         private Button btnRefresh;
         private ComboBox cmbDevice;
 
+        private Timer jogTimer;
+        private MarkPoints curPoint;
+        private string curAxis;
+        private double curDelta;
+        private Label curLabel;
+
         public MotionControl()
         {
             InitializeComponent();
             InitUI();
             LoadConfig();
+
+            jogTimer = new Timer { Interval = 50 };
+            jogTimer.Tick += (s, e) => JogMove(curPoint, curAxis, curDelta, curLabel);
         }
 
         private void InitUI()
@@ -123,7 +134,7 @@ namespace YR_TM.PageView
         private class ComboOption
         {
             public string Value { get; set; }
-            public string Text {  get; set; }
+            public string Text { get; set; }
         }
 
         private DataGridViewComboBoxColumn CreateAxisCombo(string name, string[] axes)
@@ -214,8 +225,10 @@ namespace YR_TM.PageView
                 var btnJogMinus = CreateButton("JOG -", Color.FromArgb(180, 80, 80));
                 var btnJogPlus = CreateButton("JOG +", Color.FromArgb(80, 180, 80));
 
-                btnJogMinus.Click += (s, e) => JogMove(p, cmbAxis.SelectedItem.ToString(), -0.5, lbl);
-                btnJogPlus.Click += (s, e) => JogMove(p, cmbAxis.SelectedItem.ToString(), 0.5, lbl);
+                btnJogMinus.MouseDown += (s, e) => StartJog(p, cmbAxis.SelectedItem.ToString(), -10, lbl);
+                btnJogMinus.MouseUp += (s, e) => StopJog();
+                btnJogPlus.MouseDown += (s, e) => StartJog(p, cmbAxis.SelectedItem.ToString(), 10, lbl);
+                btnJogPlus.MouseUp += (s, e) => StopJog();
 
                 panelBtns.Controls.Add(btnMove);
                 panelBtns.Controls.Add(btnSave);
@@ -270,6 +283,20 @@ namespace YR_TM.PageView
             //TODO: 实际运动发送Jog命令
         }
 
+        private void StartJog(MarkPoints p, string axis, double delta, Label lbl)
+        {
+            curPoint = p;
+            curAxis = axis;
+            curDelta = delta;
+            curLabel = lbl;
+            jogTimer.Start();
+        }
+
+        private void StopJog()
+        {
+            jogTimer.Stop();
+        }
+
         private Control CreateButton(string text, Color color)
         {
             return new Button
@@ -303,7 +330,7 @@ namespace YR_TM.PageView
                     ZValue = row.Cells["ZValue"].Value?.ToString() ?? "",
                     RValue = row.Cells["RValue"].Value?.ToString() ?? "",
                 };
-                if(!string.IsNullOrEmpty(p.Name))
+                if (!string.IsNullOrEmpty(p.Name))
                     list.Add(p);
             }
 
@@ -337,7 +364,7 @@ namespace YR_TM.PageView
 
             var current = list?.FindAll(p => p.Device == cmbDevice.Text);
 
-            if(current != null)
+            if (current != null)
             {
                 foreach (var p in current)
                 {
@@ -365,7 +392,7 @@ namespace YR_TM.PageView
             if (column == null || string.IsNullOrEmpty(value)) return null;
 
             var options = column.DataSource as List<ComboOption>;
-            if(options != null && options.Any(o =>  o.Value == value))
+            if (options != null && options.Any(o => o.Value == value))
                 return value;
 
             return options?.FirstOrDefault()?.Value;
