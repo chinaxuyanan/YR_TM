@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeviceCommLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DeviceCommLib\bin\Debug\DeviceCommLib.dll</HintPath>
-    </Reference>
     <Reference Include="EPPlus, Version=8.2.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.8.2.1\lib\net462\EPPlus.dll</HintPath>
     </Reference>
@@ -237,6 +233,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeviceCommLib\DeviceCommLib.csproj">
+      <Project>{e449341b-4577-4a88-ba68-80dc8ebeee94}</Project>
+      <Name>DeviceCommLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{c27cd925-6c6a-41a9-a15b-407c58a9d220}</Project>
       <Name>Logger</Name>

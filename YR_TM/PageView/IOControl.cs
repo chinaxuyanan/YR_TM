@@ -100,8 +100,8 @@ namespace YR_TM.PageView
 
             foreach (var output in _ioConfig.Outputs)
             {
-                if(!string.IsNullOrEmpty(output.Name))
-                    panelOutput.Controls.Add(CreateIOButton(output.Name));
+                if (!string.IsNullOrEmpty(output.Name))
+                    panelOutput.Controls.Add(CreateIOButton($"{output.Address}:{output.Name}"));
             }
 
             // --- 底部状态栏 ---
@@ -141,7 +141,7 @@ namespace YR_TM.PageView
             var btn = new Button
             {
                 Text = $"{name} OFF",
-                Width = 120,
+                Width = 240,
                 Height = 40,
                 BackColor = Color.FromArgb(80, 80, 80),
                 ForeColor = Color.White,

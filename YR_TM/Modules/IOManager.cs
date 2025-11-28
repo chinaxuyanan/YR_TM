@@ -30,7 +30,7 @@ namespace YR_TM
     {
         public enum TAM_IO_Inputs
         {
-            急停旋钮=0,
+            急停旋钮=1,
 
             检修灯旋钮,
 
@@ -42,7 +42,7 @@ namespace YR_TM
 
             停止按钮,
 
-            Holder板光电开关=10,
+            Holder板光电开关=9,
 
             夹紧气缸到位磁性开关,
 
@@ -58,13 +58,13 @@ namespace YR_TM
 
             气压数显表输出2,
 
-            点胶机运行状态=20,
+            点胶机运行状态=17,
 
             安全门接近开关,
 
-            点胶针头原点传感器,
+            点胶针头原点X传感器,
 
-            点胶针头测高传感器,
+            点胶针头原点Y传感器,
 
             真空吸嘴吸真空传感器,
 
@@ -74,7 +74,7 @@ namespace YR_TM
 
             安全光栅,
 
-            温控仪报警_1=30,
+            温控仪报警_1,
 
             温控仪报警_2,
 
@@ -82,12 +82,15 @@ namespace YR_TM
 
             擦胶到位磁性开关,
 
+            擦胶布料感应Sensor,
+
+            点胶针头测高sensor,
 
         }
 
         public enum TAM_IO_Outputs 
         {
-            三色灯_红灯=0,
+            三色灯_红灯=1,
 
             三色灯_黄灯,
 
@@ -103,7 +106,7 @@ namespace YR_TM
 
             真空发生器_破,
 
-            点胶机启动=10,
+            点胶机启动,
 
             力值显示仪表清零,
 
@@ -119,11 +122,17 @@ namespace YR_TM
 
             Holder夹紧气缸到位电磁阀,
 
-            停止按钮指示灯=20,
+            停止按钮指示灯,
 
             擦胶原位电磁阀,
 
             擦胶到位电磁阀,
+
+            点胶机夹爪,
+
+            加热棒继电器 =24,
+
+            吸气灯,
 
 
         }
@@ -215,11 +224,11 @@ namespace YR_TM
         {
             var config = new IOConfig();
 
-            foreach(IO_Address.TAM_IO_Outputs input in Enum.GetValues(typeof(IO_Address.TAM_IO_Outputs)))
+            foreach(IO_Address.TAM_IO_Inputs input in Enum.GetValues(typeof(IO_Address.TAM_IO_Inputs)))
             {
                 config.Inputs.Add(new IOPoint
                 {
-                    Address = $"X{(int)input:D2}",
+                    Address = $"In{(int)input:D2}",
 
                     Name = input.ToString(),
 
@@ -231,7 +240,7 @@ namespace YR_TM
             {
                 config.Outputs.Add(new IOPoint
                 {
-                    Address = $"X{(int)output:D2}",
+                    Address = $"Out{(int)output:D2}",
 
                     Name= output.ToString(),
 
